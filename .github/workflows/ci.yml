@@ -1,0 +1,68 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    
+    - name: Setup Solana
+      uses: solana-labs/setup-solana@v1
+      with:
+        solana-version: "1.18.0"
+    
+    - name: Setup Anchor
+      run: |
+        cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
+    
+    - name: Build
+      run: anchor build
+    
+    - name: Test
+      run: anchor test
+    
+    - name: Lint
+      run: |
+        cargo clippy --all-targets --all-features -- -D warnings
+        cargo fmt --all -- --check
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    
+    - name: Security Audit
+      run: cargo audit
+    
+    - name: Check Dependencies
+      run: cargo tree
+
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check Documentation
+      run: |
+        # Check if all required docs exist
+        test -f docs/project_idea.md
+        test -f docs/deployment_guide.md
+        test -f docs/security_audit.md
+        test -f docs/project_structure.md

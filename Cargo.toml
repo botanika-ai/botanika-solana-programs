@@ -1,0 +1,13 @@
+[workspace]
+members = [
+    "programs/common",
+    "programs/staking",
+    "programs/rewards",
+    "programs/governance"
+]
+
+[dev-dependencies]
+anchor-lang = "0.29.0"
+solana-program-test = "1.18.0"
+solana-sdk = "1.18.0"
+tokio = { version = "1.36", features = ["macros", "rt-multi-thread"] }

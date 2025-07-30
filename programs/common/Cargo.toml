@@ -1,0 +1,12 @@
+[package]
+name = "botanika-common"
+version = "0.1.0"
+description = "Botanika Common Types and Utilities"
+edition = "2021"
+
+[lib]
+name = "botanika_common"
+
+[dependencies]
+anchor-lang = "0.29.0"
+anchor-spl = "0.29.0" 
